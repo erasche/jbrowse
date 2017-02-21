@@ -182,7 +182,14 @@ constructor: function(params) {
                            //    if no URL param and no tracks cookie, then use defaultTracks
                            if (thisB.config.forceTracks)   { tracksToShow = tracksToShow.concat(thisB.config.forceTracks.split(",")); }
                            else if (thisB.cookie("tracks")) { tracksToShow = tracksToShow.concat(thisB.cookie("tracks").split(",")); }
-                           else if (thisB.config.defaultTracks) { tracksToShow = tracksToShow.concat(thisB.config.defaultTracks.split(",")); }
+                           else if (thisB.config.defaultTracks) {
+                               // In rare cases thisB.config.defaultTracks already contained an array that appeared to
+                               // have been split in a previous invocation of this function. Thus, we only try and split
+                               // it if it isn't already split.
+                               if (!value instanceof Array) {
+                                  tracksToShow = tracksToShow.concat(thisB.config.defaultTracks.split(","));
+                               }
+                           }
                            // currently, force "DNA" _only_ if no other guides as to what to show?
                            //    or should this be changed to always force DNA to show?
                            if (tracksToShow.length == 0) { tracksToShow.push("DNA"); }
